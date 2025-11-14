@@ -1,32 +1,26 @@
-function handleSubmit(event) {
+const messageLink = `http://localhost:3000/message`;
+
+async function handleSubmit(event) {
   event.preventDefault();
 
-  const chatMessages = document.getElementById("chatMessages");
   const messageInput = document.getElementById("messageInput");
 
-  const msg = messageInput.value.trim();
-  if (!msg) return;
-  //   simulate sender or receiser
-  var msgType;
-  if (Math.random() > 0.5) {
-    msgType = "sent";
-  } else {
-    msgType = "received";
+  const message = messageInput.value.trim();
+  if (!message) return;
+
+  try {
+    const response = await axios.post(
+      `${messageLink}/send`,
+      { message },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    alert(response.data.message);
+  } catch (error) {
+    console.log(error.response);
   }
-
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", `${msgType}`);
-  messageDiv.innerHTML = `
-    <p>${msg}</p>
-    <span class="timestamp">
-      ${new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      })}
-    </span>
-  `;
-
-  chatMessages.appendChild(messageDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  messageInput.value = "";
+  event.target.reset();
 }

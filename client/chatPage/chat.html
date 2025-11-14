@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat Window</title>
   <link rel="stylesheet" href="chat.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
+
 <body>
 
-<div class="chat-container">
-  <div class="chat-header">
-    <h2>Chat Room</h2>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Chat Room</h2>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <form class="chat-input" id="chatForm" onsubmit="handleSubmit(event)">
+      <input type="text" id="messageInput" placeholder="Type a message..." required>
+      <button type="submit">Send</button>
+    </form>
   </div>
 
-  <div class="chat-messages" id="chatMessages"></div>
-
-  <form class="chat-input" id="chatForm" onsubmit="handleSubmit(event)">
-    <input type="text" id="messageInput" placeholder="Type a message..." required>
-    <button type="submit">Send</button>
-  </form>
-</div>
-
-<script src="chat.js"></script>
+  <script src="chat.js"></script>
 </body>
+
 </html>

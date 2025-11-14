@@ -11,9 +11,11 @@ app.use(express.json());
 
 // Import Models
 require("./src/Model/user");
+require("./src/Model/message");
 
 // import Routers
 const userRouter = require("./src/Routes/userRoutes");
+const messageRouter = require("./src/Routes/messageRoutes");
 
 // Default routes
 app.get("/", (req, res) => {
@@ -22,6 +24,7 @@ app.get("/", (req, res) => {
 
 // Making custom Routes
 app.use("/user", userRouter);
+app.use("/message", messageRouter);
 
 (async () => {
   try {
