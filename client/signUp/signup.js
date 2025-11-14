@@ -1,5 +1,5 @@
-const signUpAPI = ``;
-function handleSignupForm(event) {
+const signUpAPI = `http://localhost:3000`;
+async function handleSignupForm(event) {
   event.preventDefault();
 
   const username = event.target.username.value.trim();
@@ -14,7 +14,15 @@ function handleSignupForm(event) {
     password,
   };
 
-  window.location.href = "/client/signIn/signin.html";
-
-  console.log(signUpData);
+  try {
+    const response = await axios.post(`${signUpAPI}/user/signup`, signUpData);
+    if (response.status === 200 || response.status === 201) {
+      alert(`Sign Up Successful! Welcome`);
+      window.location.href = "../signIn/signin.html";
+    } else {
+      alert("Sign Up Failed. Please try again.");
+    }
+  } catch (error) {
+    console.log(error.response);
+  }
 }

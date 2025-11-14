@@ -1,5 +1,5 @@
-const signinAPI = ``;
-function handleSigninForm(event) {
+const signinAPI = `http://localhost:3000`;
+async function handleSigninForm(event) {
   event.preventDefault();
 
   const email = event.target.email.value.trim();
@@ -10,9 +10,16 @@ function handleSigninForm(event) {
     password,
   };
 
-  
+  try {
+    const response = await axios.post(`${signinAPI}/user/signin`, signInData);
+    localStorage.setItem("token", response?.data?.token);
 
-  // window.location.href = "";
-
-  console.log(signInData);
+    if (response.status === 200 || response.status === 201) {
+      alert(`Sign In Successful! Welcome`);
+    } else {
+      alert("Sign In Failed. Please try again.");
+    }
+  } catch (error) {
+    console.log(error.response);
+  }
 }
