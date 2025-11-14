@@ -1,5 +1,6 @@
 const Message = require("../Model/message");
 
+// ****************** Send Meaage Logic *************//
 const sendMessage = async (req, res) => {
   try {
     // step1: get userId from payload and message from body.
@@ -15,8 +16,29 @@ const sendMessage = async (req, res) => {
 
     // Step3: retur response
     return res.status(201).json({
-      message: "Message Sent",
+      message: "Sent",
       createdMessage,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: err.message,
+    });
+  }
+};
+
+// ******************* Receive Message Logic ****************//
+const getMessage = async (req, res) => {
+  try {
+    // Step1: get userId from payload.
+    const userId = req.payload.id;
+
+    // Step2: get message from DB.
+    const messages = await Message.findAll({
+      where: { userId },
+    });
+    return res.status(200).json({
+      message: "Sent",
+      messages,
     });
   } catch (err) {
     return res.status(500).json({
@@ -27,4 +49,5 @@ const sendMessage = async (req, res) => {
 
 module.exports = {
   sendMessage,
+  getMessage,
 };

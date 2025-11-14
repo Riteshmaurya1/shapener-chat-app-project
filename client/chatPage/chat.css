@@ -62,7 +62,7 @@
 }
 
 /* Sent (Right) */
-.message.sent {
+.message.Sent {
   background: #8d88d7;
   color: white;
   align-self: flex-end;
@@ -70,7 +70,7 @@
 }
 
 /* Received (Left) */
-.message.received {
+.message.Received {
   background: #e5e5ea;
   color: black;
   align-self: flex-start;
