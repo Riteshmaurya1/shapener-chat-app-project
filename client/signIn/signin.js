@@ -16,6 +16,7 @@ async function handleSigninForm(event) {
 
     if (response.status === 200 || response.status === 201) {
       alert(`Sign In Successful! Welcome`);
+      window.location.href = "../chatPage/chat.html";
     } else {
       alert("Sign In Failed. Please try again.");
     }
