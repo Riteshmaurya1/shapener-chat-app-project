@@ -3,10 +3,10 @@ const messageInput = document.getElementById("messageInput");
 const chatMessages = document.getElementById("chatMessages");
 const token = localStorage.getItem("token");
 if (!token) {
-  window.location.href = "../client/signUp/signup.html";
+  window.location.href = "../signUp/signup.html";
 }
 
-const socket = io("http://localhost:3000");
+const socket = io("ws://localhost:3000", { auth: { token } });
 
 // receive messages via socket.io
 socket.on("receive-message", (message) => {
@@ -18,7 +18,7 @@ async function handleSubmit(event) {
 
   const message = messageInput.value.trim();
   if (!message) return;
-  
+
   try {
     const response = await axios.post(
       `${messageLink}/send`,
@@ -38,8 +38,8 @@ async function handleSubmit(event) {
   }
   event.target.reset();
 }
-// window.addEventListener("DOMContentLoaded", async () => {
-async function fetchdata() {
+window.addEventListener("DOMContentLoaded", async () => {
+  // async function fetchdata() {
   try {
     const response = await axios.get(`${messageLink}/receive`, {
       headers: {
@@ -57,7 +57,7 @@ async function fetchdata() {
   } catch (error) {
     console.log(error.response);
   }
-}
+});
 
 function addMessage(text, type) {
   const messageDiv = document.createElement("div");

@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 4000;
 const db = require("./src/Config/db-connection");
 const http = require("http");
 const { Server } = require("socket.io");
+const socketAuth = require("./src/Middleware/socketAuth");
 
 // Some middlewares.
 app.use(cors());
@@ -15,10 +16,13 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://127.0.0.1:5500",
-    methods: ["GET", "POST"],
+    origin:
+      process.env.NODE_ENV === "production"
+        ? false
+        : ["http://127.0.0.1:5500", "http://localhost:3000"],
   },
 });
+io.use(socketAuth);
 
 // Import Models
 require("./src/Model/user");
@@ -42,7 +46,7 @@ io.on("connection", (socket) => {
   console.log(`${socket.id} : User Connected 💖`);
 
   socket.on("send-message", (message) => {
-    console.log(`User : ${socket.id} -- Message : ${message}`);
+    console.log(`User : ${socket.user.username} -- Message : ${message}`);
     socket.broadcast.emit("receive-message", message);
   });
 });
