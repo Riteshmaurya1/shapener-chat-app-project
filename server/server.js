@@ -5,15 +5,20 @@ const cors = require("cors");
 const PORT = process.env.PORT || 4000;
 const db = require("./src/Config/db-connection");
 const http = require("http");
-const WebSocket = require("ws");
+const { Server } = require("socket.io");
 
 // Some middlewares.
 app.use(cors());
 app.use(express.json());
 
-// Create HTTP + Web Socket Server....
+// Create HTTP + Socket.io Server....
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const io = new Server(server, {
+  cors: {
+    origin: "http://127.0.0.1:5500",
+    methods: ["GET", "POST"],
+  },
+});
 
 // Import Models
 require("./src/Model/user");
@@ -32,19 +37,16 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/message", messageRouter);
 
-// Web Socket events....
-let sockets = [];
-wss.on("connection", (ws) => {
-  console.log("Client Connected");
-  sockets.push(ws);
-  
-  // Board Cast
-  ws.on("message", (message) => {
-    sockets.forEach((s) => {
-      s.send(message);
-    });
+// Socket.io events....
+io.on("connection", (socket) => {
+  console.log(`${socket.id} : User Connected 💖`);
+
+  socket.on("send-message", (message) => {
+    console.log(`User : ${socket.id} -- Message : ${message}`);
+    io.emit("receive-message", message);
   });
 });
+
 (async () => {
   try {
     await db.sync({ force: false });

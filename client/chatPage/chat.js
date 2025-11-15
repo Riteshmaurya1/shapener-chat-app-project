@@ -1,20 +1,17 @@
 const messageLink = `http://localhost:3000/message`;
 const messageInput = document.getElementById("messageInput");
 const chatMessages = document.getElementById("chatMessages");
+const token = localStorage.getItem("token");
+if (!token) {
+  window.location.href = "../client/signUp/signup.html";
+}
 
-// Web socket server link
-const socket = new WebSocket("ws://localhost:3000");
+const socket = io("http://localhost:3000");
 
-// confirm web socket connection successfull.
-socket.onopen = () => {
-  console.log("WebSocket connected");
-};
-
-// get message from web socket
-socket.onmessage = async (event) => {
-  const data = await event.data.text();
-  addMessage(data, "Received");
-};
+// receive messages via socket.io
+socket.on("receive-message", (message) => {
+  addMessage(message, "Received");
+});
 
 async function handleSubmit(event) {
   event.preventDefault();
@@ -28,13 +25,12 @@ async function handleSubmit(event) {
       { message },
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
-    // Send message to the socket
-    socket.send(message);
-
+    // Send via socket.io
+    socket.emit("send-message", message);
     addMessage(message, "Sent");
     alert(response.data.message);
   } catch (error) {
