@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
 
   socket.on("send-message", (message) => {
     console.log(`User : ${socket.id} -- Message : ${message}`);
-    io.emit("receive-message", message);
+    socket.broadcast.emit("receive-message", message);
   });
 });
 

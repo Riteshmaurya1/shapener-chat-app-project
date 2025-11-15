@@ -18,7 +18,7 @@ async function handleSubmit(event) {
 
   const message = messageInput.value.trim();
   if (!message) return;
-
+  
   try {
     const response = await axios.post(
       `${messageLink}/send`,
