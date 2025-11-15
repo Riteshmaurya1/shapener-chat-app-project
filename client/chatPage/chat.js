@@ -9,7 +9,7 @@ if (!token) {
 const socket = io("ws://localhost:3000", { auth: { token } });
 
 // receive messages via socket.io
-socket.on("receive-message", (message) => {
+socket.on("receive-message", (data, message) => {
   addMessage(message, "Received");
 });
 
@@ -59,7 +59,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-function addMessage(text, type) {
+function addMessage(text, type, username = "Ritesh") {
+  const name = username.split("")[1];
   const messageDiv = document.createElement("div");
   messageDiv.classList.add("message", type);
 
