@@ -2,6 +2,20 @@ const messageLink = `http://localhost:3000/message`;
 const messageInput = document.getElementById("messageInput");
 const chatMessages = document.getElementById("chatMessages");
 
+// Web socket server link
+const socket = new WebSocket("ws://localhost:3000");
+
+// confirm web socket connection successfull.
+socket.onopen = () => {
+  console.log("WebSocket connected");
+};
+
+// get message from web socket
+socket.onmessage = async (event) => {
+  const data = await event.data.text();
+  addMessage(data, "Received");
+};
+
 async function handleSubmit(event) {
   event.preventDefault();
 
@@ -18,6 +32,9 @@ async function handleSubmit(event) {
         },
       }
     );
+    // Send message to the socket
+    socket.send(message);
+
     addMessage(message, "Sent");
     alert(response.data.message);
   } catch (error) {
@@ -25,7 +42,8 @@ async function handleSubmit(event) {
   }
   event.target.reset();
 }
-window.addEventListener("DOMContentLoaded", async () => {
+// window.addEventListener("DOMContentLoaded", async () => {
+async function fetchdata() {
   try {
     const response = await axios.get(`${messageLink}/receive`, {
       headers: {
@@ -43,7 +61,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.log(error.response);
   }
-});
+}
 
 function addMessage(text, type) {
   const messageDiv = document.createElement("div");
