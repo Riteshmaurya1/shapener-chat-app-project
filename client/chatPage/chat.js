@@ -1,4 +1,6 @@
 const messageLink = `http://localhost:3000/message`;
+const emailVerificationLink = `http://localhost:3000/user`;
+
 const messageInput = document.getElementById("messageInput");
 const chatMessages = document.getElementById("chatMessages");
 
@@ -74,13 +76,32 @@ function addMessage(text, type, username = "Ritesh") {
 }
 
 // ************ Search Input *****************//
-function handleSearch(event) {
+async function handleSearch(event) {
   event.preventDefault();
-  const email = event.target.search.value.trim();
-  console.log(email);
 
-  window.roomName = email;
-  socket.emit("join-room", { roomName });
-  alert("Room we join: " + email);
+  const myEmail = localStorage.getItem("email");
+  const meetingEmail = event.target.search.value.trim();
+
+  const roomName = [myEmail, meetingEmail].sort().join("-");
+
+  try {
+    const response = await axios.post(
+      `${emailVerificationLink}/all`,
+      { email: meetingEmail },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    window.roomName = roomName;
+    socket.emit("join-room", { roomName });
+    alert("Room we join: " + roomName);
+    console.log(response?.data?.verifiedEmail?.email);
+  } catch (error) {
+    alert("Error facing joinig Room: " + error.message);
+    console.log(error.message);
+  }
+
   event.target.reset();
 }
