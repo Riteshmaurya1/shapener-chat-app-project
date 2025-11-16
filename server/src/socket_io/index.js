@@ -15,13 +15,14 @@ module.exports = (server) => {
   // public chats
   socketAuth(io);
 
-  // Personal chats
-  personal_chat(io);
-
   // Socket.io events.... handshake
   io.on("connection", (socket) => {
     console.log(`${socket.id} : User Connected 💖`);
-    chatHandler(socket, io);
+    // Personal chats groups
+    personal_chat(socket, io);
+
+    // public chats
+    // chatHandler(socket, io);
   });
 
   return io;
