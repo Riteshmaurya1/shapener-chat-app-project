@@ -1,28 +1,21 @@
 require("dotenv").config();
-const express = require("express");
-const app = express();
-const cors = require("cors");
 const PORT = process.env.PORT || 4000;
-const db = require("./src/Config/db-connection");
+
+const express = require("express");
 const http = require("http");
-const { Server } = require("socket.io");
-const socketAuth = require("./src/Middleware/socketAuth");
+const app = express();
+const server = http.createServer(app);
+const cors = require("cors");
+
+const db = require("./src/Config/db-connection");
+const socketIo = require("./src/socket_io");
 
 // Some middlewares.
 app.use(cors());
 app.use(express.json());
 
-// Create HTTP + Socket.io Server....
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin:
-      process.env.NODE_ENV === "production"
-        ? false
-        : ["http://127.0.0.1:5500", "http://localhost:3000"],
-  },
-});
-io.use(socketAuth);
+// Socket.io Server....
+socketIo(server);
 
 // Import Models
 require("./src/Model/user");
@@ -40,20 +33,6 @@ app.get("/", (req, res) => {
 // Making custom Routes
 app.use("/user", userRouter);
 app.use("/message", messageRouter);
-
-// Socket.io events....
-io.on("connection", (socket) => {
-  console.log(`${socket.id} : User Connected 💖`);
-
-  socket.on("send-message", (message) => {
-    console.log(`User : ${socket.user.username} -- Message : ${message}`);
-    socket.broadcast.emit(
-      "receive-message",
-      { username: socket.user.username },
-      message
-    );
-  });
-});
 
 (async () => {
   try {
