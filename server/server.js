@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const cors = require("cors");
 
 const db = require("./src/Config/db-connection");
-const socketIo = require("./src/socket_io");
+const socketIo = require("./src/socket_io/index");
 
 // Some middlewares.
 app.use(cors());
