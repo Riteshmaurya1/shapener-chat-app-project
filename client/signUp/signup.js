@@ -23,6 +23,6 @@ async function handleSignupForm(event) {
       alert("Sign Up Failed. Please try again.");
     }
   } catch (error) {
-    console.log(error.response);
+    console.log(error);
   }
 }

@@ -6,7 +6,7 @@ const chatMessages = document.getElementById("chatMessages");
 
 const token = localStorage.getItem("token");
 if (!token) {
-  window.location.href = "../signUp/signup.html";
+  window.location.href = "../signIn/signin.html";
 }
 
 const socket = io("ws://localhost:3000", { auth: { token } });
@@ -99,8 +99,8 @@ async function handleSearch(event) {
     alert("Room we join: " + roomName);
     console.log(response?.data?.verifiedEmail?.email);
   } catch (error) {
-    alert("Error facing joinig Room: " + error.message);
-    console.log(error.message);
+    alert("Error facing joinig Room: " + error.response.data.message);
+    console.log(error.response.data.message);
   }
 
   event.target.reset();

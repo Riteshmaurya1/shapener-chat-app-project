@@ -20,14 +20,17 @@
             <input type="email" name="email" placeholder="Enter Email" required>
 
             <label for="phoneNumber">Phone Number</label>
-            <input type="tel" name="phoneNumber" placeholder="Enter Phone Number" required>
+            <input type="tel" name="phoneNumber" placeholder="Enter Phone Number" required maxlength="10">
 
             <label for="password">Password</label>
             <input type="password" name="password" placeholder="Enter Password" required>
 
             <button type="submit">Sign Up</button>
         </form>
-        <span>You have account <a href="../signIn/signin.html">login</a></span>
+        <p class="bottom-link">You already have account?<a href="../signIn/signin.html">login</a></p>
+        <div>
+            <p id="error-tag"></p>
+        </div>
     </div>
 
     <script src="./signup.js"></script>

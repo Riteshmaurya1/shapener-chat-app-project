@@ -73,7 +73,7 @@ const signin = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        message: "Invalid email or password",
+        message: "User not found",
         success: false,
       });
     }
@@ -123,7 +123,7 @@ const getUsers = async (req, res) => {
     });
     if (!verifiedEmail) {
       return res.status(404).json({
-        message: "Not found",
+        message: "User Not found",
         success: false,
       });
     }

@@ -1,4 +1,6 @@
 const signinAPI = `http://localhost:3000`;
+let errorTagP = document.getElementById("error-tag");
+
 async function handleSigninForm(event) {
   event.preventDefault();
 
@@ -22,6 +24,8 @@ async function handleSigninForm(event) {
       alert("Sign In Failed. Please try again.");
     }
   } catch (error) {
-    console.log(error.response);
+    errorTagP.textContent = `Sign Up Failed. ${error.response.data.message}`;
+    errorTagP.classList = "error-tag";
+    console.log(error.response.data.message);
   }
 }

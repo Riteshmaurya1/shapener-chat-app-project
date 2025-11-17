@@ -77,7 +77,27 @@ body {
 .signup-form button:active {
   transform: translateY(0);
 }
-
+.bottom-link {
+  text-align: start;
+  color: #333;
+  font-size: 15px;
+  padding: 5px;
+}
+.bottom-link a {
+  text-align: center;
+  color: #0c14f1;
+  font-size: 15px;
+  padding: 5px;
+}
+.bottom-link a {
+  color: #5b60f9;
+}
+.error-tag {
+  border: 1px solid red;
+  border-radius: 5px;
+  background: rgba(255, 185, 185, 0.814);
+  padding: 3px;
+}
 /* Responsive Design */
 @media (max-width: 480px) {
   .signup-div {
