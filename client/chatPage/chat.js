@@ -9,6 +9,8 @@ if (!token) {
   window.location.href = "../signIn/signin.html";
 }
 
+// Time for time stamp
+
 const socket = io("ws://localhost:3000", { auth: { token } });
 
 // receive messages via socket.io
@@ -62,8 +64,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-function addMessage(text, type, username = "Ritesh") {
-  const name = username.split("")[1];
+function addMessage(text, type) {
   const messageDiv = document.createElement("div");
   messageDiv.classList.add("message", type);
 
