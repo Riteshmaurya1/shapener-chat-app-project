@@ -1,26 +1,35 @@
 const messageLink = `http://localhost:3000/message`;
-const emailVerificationLink = `http://localhost:3000/user`;
-const allUsers = `http://localhost:3000/user`;
 
 const messageInput = document.getElementById("messageInput");
 const chatMessages = document.getElementById("chatMessages");
-const userBox = document.getElementById("users-box");
 
+// Find token inside the localstorage
 const token = localStorage.getItem("token");
 if (!token) {
   window.location.href = "../signIn/signin.html";
 }
 
+// make variabe for storing groupName for emiting at server
+let currentGroupName;
+
+// Asscessing socket from backend
 const socket = io("ws://localhost:3000", { auth: { token } });
 
-// it is for the private chat
-socket.on("new-message", (data) => {
+// it is for the public group chat and listen for group messages
+socket.on("group-messages", (data) => {
+  console.log(data);
   addMessage(data.message, "Received");
 });
 
-// it is for the public group chat
-socket.emit("group-chat");
+// if user is leave room
+socket.on("disconnect", () => {
+  alert("Disconnected from server");
+});
 
+// // it is for the public group chat
+// socket.emit("group-chat");
+
+// Send message to the DB and socket backend.
 async function handleSubmit(event) {
   event.preventDefault();
 
@@ -37,12 +46,11 @@ async function handleSubmit(event) {
         },
       }
     );
-    // Send via socket.io
-    // it is for the private chat
-    socket.emit("new-message", { message, roomName: window.roomName });
-
     // it is for the public group chat
-    socket.emit("group-messages", { message });
+    socket.emit("group-messages", {
+      message,
+      groupName: currentGroupName,
+    });
 
     addMessage(message, "Sent");
     alert(response.data.message);
@@ -51,8 +59,10 @@ async function handleSubmit(event) {
   }
   event.target.reset();
 }
-window.addEventListener("DOMContentLoaded", async () => {
-  // async function fetchdata() {
+
+// get Message from database
+// window.addEventListener("DOMContentLoaded", async () => {
+async function fetchdata() {
   try {
     const response = await axios.get(`${messageLink}/receive`, {
       headers: {
@@ -65,13 +75,15 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.log(messageType);
 
     messages.forEach((msg) => {
-      addMessage(msg.message, messageType); // type = 'sent' or 'received'
+      addMessage(msg.message, messageType);
     });
   } catch (error) {
     console.log(error.response);
   }
-});
+}
+fetchdata();
 
+// Add message to the UI
 function addMessage(text, type) {
   const messageDiv = document.createElement("div");
   messageDiv.classList.add("message", type);
@@ -84,31 +96,17 @@ function addMessage(text, type) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// ************ Search Input *****************//
+// Enter the group name
 async function handleSearch(event) {
   event.preventDefault();
 
-  const myEmail = localStorage.getItem("email");
-  const meetingEmail = event.target.search.value.trim();
-
-  const roomName = [myEmail, meetingEmail].sort().join("-");
-
+  const groupName = event.target.search.value.trim();
+  if (!groupName) return;
   try {
-    const response = await axios.post(
-      `${emailVerificationLink}/all`,
-      { email: meetingEmail },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-    window.roomName = roomName;
-    // it is for the private chat
-    socket.emit("join-room", { roomName });
-
-    alert("Room we join: " + roomName);
-    console.log(response?.data?.verifiedEmail?.email);
+    // it is for the public group chat
+    socket.emit("group-chat", { groupName });
+    currentGroupName = groupName;
+    alert("Room we join: " + groupName);
   } catch (error) {
     alert("Error facing joinig Room: " + error.response.data.message);
     console.log(error.response.data.message);
@@ -117,33 +115,10 @@ async function handleSearch(event) {
   event.target.reset();
 }
 
-// ************ Get All users *****************//
-window.addEventListener("DOMContentLoaded", async () => {
-  try {
-    const response = await axios.get(`${allUsers}/users`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    let typing = Math.random() > 0.5 ? "Typing" : "offline";
-    console.log(typing);
-
-    const users = response.data.users;
-    users.forEach((user) => {
-      let pTag = document.createElement("p");
-      pTag.classList.add("users-cards");
-      pTag.textContent = `${user.username}`;
-      userBox.appendChild(pTag);
-    });
-  } catch (error) {
-    console.log(error.response.message);
-  }
-});
-
 // ******************* Chat Switcher ***************** //
 const chatSwitcher = document.getElementById("chat-switcher");
 chatSwitcher.addEventListener("click", () => {
-  window.location.href = "./group-chat.html";
+  window.location.href = "./chat.html";
 });
 
 // current User

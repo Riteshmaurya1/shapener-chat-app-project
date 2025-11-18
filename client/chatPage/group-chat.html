@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Chat Window</title>
+    <link rel="stylesheet" href="chat.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="user-container">
+        <div class="search-box">
+            <form id="search-form" onsubmit="handleSearch(event)">
+                <input type="search" name="search" id="search-input" placeholder="Enter group name...">
+                <button id="create-room" type="submit">Create Group</button>
+            </form>
+        </div>
+        <div class="users-box" id="users-box">
+            <span class="chat-switcher" id="chat-switcher">Chats</span>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Group Chat Room</h2>
+            <div>
+                <span class="username-indicator">Sign as <span id="username-indicator"></span></span>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages"></div>
+
+        <form class="chat-input" id="chatForm" onsubmit="handleSubmit(event)">
+            <input type="text" id="messageInput" placeholder="Type a message..." required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="group-chat.js"></script>
+</body>
+
+</html>

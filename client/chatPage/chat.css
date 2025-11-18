@@ -287,6 +287,68 @@ body {
   .search-box {
     padding: 20px;
   }
+  .users-box {
+    border: 1px solid rgba(123, 123, 123, 0.829);
+    height: 76vh;
+    border-radius: 10px;
+    margin: 10px;
+    display: block;
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  .users-box::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chat-switcher {
+    padding: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    position: absolute;
+    top: 117px;
+  }
+  .users-cards {
+    border: 1px solid rgb(184, 184, 184);
+    padding: 10px;
+    color: rgb(181, 181, 181);
+    border-radius: 5px;
+    margin: 10px;
+    box-shadow: 0px 0px 7px rgb(89, 89, 89);
+  }
+  .users-cards:hover {
+    box-shadow: 0px 0px 10px rgb(184, 184, 184);
+    color: white;
+  }
+
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    color: white;
+  }
+
+  .chat-header > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+  }
+
+  .username-indicator {
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    padding: 4px 10px;
+  }
+  .username-indicator > span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    padding: 2px;
+  }
 
   #search-form {
     flex-direction: column;

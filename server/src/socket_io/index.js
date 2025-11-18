@@ -2,6 +2,7 @@ const { Server } = require("socket.io");
 const socketAuth = require("./middleware.js");
 const chatHandler = require("./handlers/chat");
 const personal_chat = require("./handlers/personalChat.js");
+const group_chat = require("./handlers/groupChat.js");
 
 module.exports = (server) => {
   const io = new Server(server, {
@@ -12,7 +13,7 @@ module.exports = (server) => {
           : ["http://127.0.0.1:5500", "http://localhost:3000"],
     },
   });
-  // public chats
+  // socket authentication
   socketAuth(io);
 
   // Socket.io events.... handshake
@@ -21,7 +22,10 @@ module.exports = (server) => {
     // Personal chats groups
     personal_chat(socket, io);
 
-    // public chats
+    // public group chats
+    group_chat(socket, io);
+
+    // private group chats
     // chatHandler(socket, io);
   });
 

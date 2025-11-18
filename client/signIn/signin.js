@@ -15,6 +15,7 @@ async function handleSigninForm(event) {
   try {
     const response = await axios.post(`${signinAPI}/user/signin`, signInData);
     localStorage.setItem("token", response?.data?.token);
+    localStorage.setItem("username", response?.data?.username);
     localStorage.setItem("email", response?.data?.email);
 
     if (response.status === 200 || response.status === 201) {

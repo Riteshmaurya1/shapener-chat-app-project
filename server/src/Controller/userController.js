@@ -93,7 +93,8 @@ const signin = async (req, res) => {
 
     // Step5: return response.
     return res.status(201).json({
-      email,
+      email: user.email,
+      username: user.username,
       token,
     });
   } catch (err) {
@@ -119,7 +120,7 @@ const getUsers = async (req, res) => {
     // step2: check into the db
     const verifiedEmail = await User.findOne({
       where: { email },
-      attributes: ["email"],
+      attributes: ["email", "username"],
     });
     if (!verifiedEmail) {
       return res.status(404).json({
@@ -140,8 +141,34 @@ const getUsers = async (req, res) => {
   }
 };
 
+const allUsers = async (req, res) => {
+  try {
+    // step1: check into the db
+    const users = await User.findAll({
+      attributes: ["email", "username"],
+    });
+    if (!users) {
+      return res.status(404).json({
+        message: "Users Not found",
+        success: false,
+      });
+    }
+
+    // step2: return all users
+    return res.status(200).json({
+      users,
+      success: true,
+    });
+  } catch (er) {
+    return res.status(500).json({
+      error: err.message,
+    });
+  }
+};
+
 module.exports = {
   signup,
   signin,
   getUsers,
+  allUsers,
 };
