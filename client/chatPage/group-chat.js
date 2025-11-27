@@ -26,9 +26,6 @@ socket.on("disconnect", () => {
   alert("Disconnected from server");
 });
 
-// // it is for the public group chat
-// socket.emit("group-chat");
-
 // Send message to the DB and socket backend.
 async function handleSubmit(event) {
   event.preventDefault();
@@ -61,7 +58,6 @@ async function handleSubmit(event) {
 }
 
 // get Message from database
-// window.addEventListener("DOMContentLoaded", async () => {
 async function fetchdata() {
   try {
     const response = await axios.get(`${messageLink}/receive`, {

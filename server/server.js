@@ -1,6 +1,5 @@
 require("dotenv").config();
 const PORT = process.env.PORT || 4000;
-
 const express = require("express");
 const http = require("http");
 const app = express();
@@ -33,6 +32,8 @@ app.get("/", (req, res) => {
 // Making custom Routes
 app.use("/user", userRouter);
 app.use("/message", messageRouter);
+
+
 
 (async () => {
   try {

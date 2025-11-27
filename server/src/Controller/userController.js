@@ -134,7 +134,7 @@ const getUsers = async (req, res) => {
       verifiedEmail,
       success: true,
     });
-  } catch (er) {
+  } catch (err) {
     return res.status(500).json({
       error: err.message,
     });
@@ -159,7 +159,7 @@ const allUsers = async (req, res) => {
       users,
       success: true,
     });
-  } catch (er) {
+  } catch (err) {
     return res.status(500).json({
       error: err.message,
     });
