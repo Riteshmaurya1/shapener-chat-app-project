@@ -1,4 +1,5 @@
 const Message = require("../Model/message");
+const {getSmartReplies} = require('../Services/geminiService')
 
 // ****************** Send Meaage Logic *************//
 const sendMessage = async (req, res) => {
@@ -36,9 +37,18 @@ const getMessage = async (req, res) => {
     const messages = await Message.findAll({
       where: { userId },
     });
+
+    // Step3: For getting Ai chat response.
+    let aiReplies = [];
+    if (messages.length > 0) {
+      const last = messages[messages.length - 1];
+      aiReplies = await getSmartReplies(last.message);
+    }
+
     return res.status(200).json({
       message: "Sent",
       messages,
+      aiReplies
     });
   } catch (err) {
     return res.status(500).json({
