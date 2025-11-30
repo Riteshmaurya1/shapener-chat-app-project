@@ -19,6 +19,7 @@ socketIo(server);
 // Import Models
 require("./src/Model/user");
 require("./src/Model/message");
+require("./src/Services/messageArchiveService");
 
 // import Routers
 const userRouter = require("./src/Routes/userRoutes");
@@ -32,8 +33,6 @@ app.get("/", (req, res) => {
 // Making custom Routes
 app.use("/user", userRouter);
 app.use("/message", messageRouter);
-
-
 
 (async () => {
   try {
