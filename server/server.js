@@ -1,6 +1,9 @@
 require("dotenv").config();
 const PORT = process.env.PORT || 4000;
 const express = require("express");
+const morgan = require("morgan");
+const fs = require("fs");
+const path = require("path");
 const http = require("http");
 const app = express();
 const server = http.createServer(app);
@@ -12,6 +15,13 @@ const socketIo = require("./src/socket_io/index");
 // Some middlewares.
 app.use(cors());
 app.use(express.json());
+
+// making Logging
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "access.log"),
+  { flags: "a" }
+);
+app.use(morgan("combined", { stream: accessLogStream }));
 
 // Socket.io Server....
 socketIo(server);
