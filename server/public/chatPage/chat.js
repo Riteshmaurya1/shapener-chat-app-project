@@ -10,6 +10,18 @@ const fileInput = document.getElementById("file-input");
 const filePreviewContainer = document.getElementById("file-preview-container");
 const filePreview = document.getElementById("file-preview");
 const removeFileBtn = document.getElementById("remove-file-btn");
+const backBtn = document.getElementById("back-btn");
+
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    document.body.classList.remove("mobile-chat-active");
+    // currentChatType = null; // Uncomment if you want to disconnect socket room logic
+  });
+}
+
+function showMobileChat() {
+  document.body.classList.add("mobile-chat-active");
+}
 
 let selectedFile = null;
 
@@ -232,6 +244,12 @@ messageInput.addEventListener('input', () => {
 });
 
 async function fetchMessages() {
+  const loader = document.getElementById("loading-spinner");
+  if (loader) {
+    loader.style.display = "flex";
+    if (window.lucide) window.lucide.createIcons(); // Initialize the loader icon if needed
+  }
+
   try {
     let url = `${messageLink}/receive`;
     if (currentChatType === 'private') {
@@ -247,6 +265,9 @@ async function fetchMessages() {
       },
     });
 
+    // Artificial delay to ensure loader is visible (better UX)
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const messages = response.data.messages || [];
     const aiReplies = response.data.aiReplies || [];
 
@@ -258,8 +279,13 @@ async function fetchMessages() {
       addMessage(msg.message, type, username, msg.attachmentUrl);
     });
 
+    // Re-init icons for messages
+    if (window.lucide) window.lucide.createIcons();
+
   } catch (error) {
     console.log(error);
+  } finally {
+    if (loader) loader.style.display = "none";
   }
 }
 
@@ -394,6 +420,7 @@ function startPrivateChat(id, email, username) {
   }
 
   socket.emit("join-room", { roomName });
+  showMobileChat();
   fetchMessages();
 }
 
@@ -492,12 +519,13 @@ async function fetchMyGroups() {
 
       const myId = localStorage.getItem('userId');
       if (group.creatorId === myId) {
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "🗑️";
+        // Use innerHTML for icon
+        deleteBtn.innerHTML = '<i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>';
+        deleteBtn.className = "group-delete-btn"; // Add class for styling if needed
         deleteBtn.style.background = "none";
         deleteBtn.style.border = "none";
         deleteBtn.style.cursor = "pointer";
-        deleteBtn.style.color = "red";
+        deleteBtn.style.color = "#ef4444";
         deleteBtn.title = "Delete Group";
         deleteBtn.onclick = (e) => {
           e.stopPropagation();
@@ -513,6 +541,9 @@ async function fetchMyGroups() {
       });
       groupsBox.appendChild(div);
     });
+
+    // re-initialize icons for the new delete buttons
+    if (window.lucide) window.lucide.createIcons();
 
   } catch (error) {
     console.error(error);
@@ -555,6 +586,6 @@ function joinCustomGroup(groupId, groupName) {
   socket.emit("join-group", { groupId });
 
   socket.emit("group-chat", { groupName: groupId });
-
+  showMobileChat();
   fetchMessages();
 }
