@@ -1,4 +1,4 @@
-const signinAPI = `http://localhost:3000`;
+const signinAPI = ``;
 let errorTagP = document.getElementById("error-tag");
 
 async function handleSigninForm(event) {

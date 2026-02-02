@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Window</title>
+  <link rel="stylesheet" href="chat.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <div class="user-container">
+    <div class="sidebar">
+      <h2>Chat App</h2>
+      <div id="groups-box" class="groups-box">
+      </div>
+      <div id="users-box" class="users-box">
+      </div>
+      <button id="create-group-btn" class="create-group-btn" style="margin: 10px; padding: 5px; width: 90%;">+ Create
+        Group</button>
+    </div>
+  </div>
+
+  <div id="group-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Create New Group</h3>
+      <input type="text" id="group-name-input" placeholder="Enter Group Name" class="modal-input" />
+      <div id="modal-users-list" class="modal-users-list">
+      </div>
+      <button id="submit-group-btn" class="modal-submit-btn">Create Group</button>
+    </div>
+  </div>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="header-info">
+        <h2 id="chat-title">Chat Room</h2>
+        <span id="header-status" class="header-status"></span>
+      </div>
+      <div>
+        <span class="username-indicator">Sign as <span id="username-indicator"></span></span>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <form class="chat-input" id="chatForm" onsubmit="handleSubmit(event)">
+      <div id="file-preview-container" class="file-preview-container" style="display: none;">
+        <img id="file-preview" src="" alt="Preview">
+        <button type="button" id="remove-file-btn">X</button>
+      </div>
+      <div class="input-wrapper">
+        <label for="file-input" class="file-label">📎</label>
+        <input type="file" id="file-input" accept="image/*" style="display: none;">
+        <input type="text" id="messageInput" placeholder="Type a message..." required>
+      </div>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script src="chat.js"></script>
+</body>
+
+</html>

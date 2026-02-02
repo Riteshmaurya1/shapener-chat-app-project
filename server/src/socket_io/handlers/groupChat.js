@@ -29,14 +29,15 @@ module.exports = (socket, io) => {
     console.log(`${socket.user.username} joined ${groupName}`);
   });
 
-  socket.on("group-messages", ({ message, groupName } = {}) => {
-    if (!message || !groupName) return;
-    
-    console.log(`User: ${socket.user.username} -- Message: ${message}`);
-    
+  socket.on("group-messages", ({ message, groupName, attachmentUrl } = {}) => {
+    if ((!message && !attachmentUrl) || !groupName) return; // Check valid payload
+
+    console.log(`User: ${socket.user.username} -- Message: ${message || "[Image]"}`);
+
     socket.to(groupName).emit("group-messages", {
       username: socket.user.username,
       message,
+      attachmentUrl
     });
   });
 

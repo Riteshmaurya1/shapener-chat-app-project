@@ -145,7 +145,7 @@ const allUsers = async (req, res) => {
   try {
     // step1: check into the db
     const users = await User.findAll({
-      attributes: ["email", "username"],
+      attributes: ["id", "email", "username"],
     });
     if (!users) {
       return res.status(404).json({

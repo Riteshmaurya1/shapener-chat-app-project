@@ -1,4 +1,4 @@
-const signUpAPI = `http://localhost:3000`;
+const signUpAPI = ``;
 async function handleSignupForm(event) {
   event.preventDefault();
 

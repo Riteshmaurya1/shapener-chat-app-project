@@ -106,12 +106,10 @@ A **full-stack real-time chat application** that enables seamless communication 
 ### **Frontend**
 | Technology | Purpose |
 |-----------|--------|
-| **React.js** | UI framework |
 | **Socket.io Client** | Real-time communication |
+| **Html** | Real-time communication |
 | **Axios** | HTTP requests |
-| **React Router** | Navigation |
 | **CSS3/Tailwind** | Styling |
-| **React Hooks** | State management |
 
 ### **Tools**
 - Git & GitHub
