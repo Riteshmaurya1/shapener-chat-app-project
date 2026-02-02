@@ -1,7 +1,14 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { GoogleGenAI } = require("@google/genai");
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // fast model[web:88][web:101]
+// Validate API key
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error("❌ GEMINI_API_KEY not found in .env file");
+}
+
+// Initialize GoogleGenAI
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 async function getSmartReplies(lastMessage) {
   const prompt = `
@@ -9,7 +16,7 @@ You are generating ultra-short smart replies for a chat app.
 
 Last chat message: "${lastMessage}"
 
-Stricty follow Rules:
+Strictly follow Rules:
 - Reply in the SAME language as the last message.
 - Generate EXACTLY 3 replies.
 - Each reply MUST be ONLY ONE word.
@@ -20,13 +27,23 @@ Output format:
 Return the 3 replies, each on its own line, with NOTHING else.
 `;
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
-  const replies = text.split("\n").filter(Boolean).slice(0, 3);
-  console.log("*****************************");
-  console.log(replies);
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash", // Using the new supported model
+      contents: prompt,
+    });
 
-  return replies;
+    const text = response.text;
+    const replies = text.split("\n").filter(Boolean).slice(0, 3);
+
+    console.log("*****************************");
+    console.log(replies);
+
+    return replies;
+  } catch (error) {
+    console.error("❌ Error generating smart replies:", error.message);
+    throw new Error(`Gemini API error: ${error.message}`);
+  }
 }
 
 module.exports = { getSmartReplies };
