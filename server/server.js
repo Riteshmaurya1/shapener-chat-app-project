@@ -13,14 +13,11 @@ const logger = require("./src/Config/logger");
 const db = require("./src/Config/db-connection");
 const socketIo = require("./src/socket_io/index");
 
-// Some middlewares.
 app.use(cors());
 app.use(express.json());
 
-// Socket.io Server....
 socketIo(server);
 
-// Import Models
 require("./src/Model/groupMember");
 require("./src/Services/messageArchiveService");
 
@@ -29,7 +26,6 @@ const Message = require("./src/Model/message");
 const Group = require("./src/Model/group");
 const GroupMember = require("./src/Model/groupMember");
 
-// Define Associations
 User.hasMany(Message, { foreignKey: 'userId' });
 Message.belongsTo(User, { foreignKey: 'userId' });
 
@@ -40,12 +36,10 @@ Group.hasMany(Message, { foreignKey: 'groupId' });
 Message.belongsTo(Group, { foreignKey: 'groupId' });
 
 
-// import Routers
 const userRouter = require("./src/Routes/userRoutes");
 const messageRouter = require("./src/Routes/messageRoutes");
 const groupRouter = require("./src/Routes/groupRoutes");
 
-// Default routes
 app.get("/", (req, res) => {
   res.send("this is home route");
 });
@@ -70,10 +64,8 @@ app.get("/health-check", async (req, res) => {
   }
 });
 
-// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// Making custom Routes
 app.use("/user", userRouter);
 app.use("/message", messageRouter);
 app.use("/group", groupRouter);
@@ -81,7 +73,6 @@ app.use("/file", require("./src/Routes/fileRoutes"));
 
 (async () => {
   try {
-    // Disabled alter: true to avoid 'Too many keys' error
     await db.sync();
     server.listen(PORT, () => {
       logger.info(`Server is running on port ${PORT}`);
