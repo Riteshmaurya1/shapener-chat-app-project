@@ -58,7 +58,7 @@ A production-ready, real-time messaging platform supporting **One-to-One chats**
 - **Logging:** Pino + Morgan
 
 ### **Frontend**
-- **Library:** React.js / HTML5
+- **Library:**  HTML5
 - **Styling:** CSS3 / Tailwind CSS
 - **API Client:** Axios
 - **Real-time Client:** Socket.io-client
